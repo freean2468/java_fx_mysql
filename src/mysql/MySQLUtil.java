@@ -19,7 +19,7 @@ public class MySQLUtil {
 		
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(URL, "root", "12345678");
+			connection = DriverManager.getConnection(URL, "root", "1234");
 			
 			if (connection != null) {
 				System.out.println("connected to student schema");

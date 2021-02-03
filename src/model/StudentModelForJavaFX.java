@@ -35,15 +35,26 @@ public class StudentModelForJavaFX {
 	}
 	
 	public String getBirthDate() { return birthDate.get(); }
+	public void setBirthDate(String birthdate) { this.birthDate.set(birthdate); }  
 	public String getName() { return name.get(); }
+	public void setName(String name) { this.name.set(name); }
 	public String getId() { return id.get(); }
 	public String getGender() { return gender.get(); }
+	public void setGender(String gender) { this.gender.set(gender); }
 	public String getEmail() { return email.get(); }
+	public void setEmail(String email) { this.email.set(email); }
 	public String getPhone() { return phone.get(); }
+	public void setPhone(String phone) { this.phone.set(phone); }
 	public String getGrade() { return grade.get(); }
+	public void setGrade(String grade) { this.grade.set(grade); }
 	public int getKor() { return kor.get(); }
+	public void setKor(int kor) { this.kor.set(kor); }
 	public int getEng() { return eng.get(); }
+	public void setEng(int eng) { this.eng.set(eng); }
 	public int getMath() { return math.get(); }
+	public void setMath(int math) { this.math.set(math); }
 	public int getTotal() { return total.get(); }
+	public void setTotal(int total) { this.total.set(total); }
 	public double getAvg() { return avg.get(); }
+	public void setAvg(double avg) { this.avg.set(avg); }
 }

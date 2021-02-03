@@ -26,7 +26,8 @@ public class Student extends Person {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.getId(), super.getPhone());
+		// assume all student objects are equal at hashCode compare stage.
+		return 0;
 	}
 	
 	@Override
@@ -34,12 +35,13 @@ public class Student extends Person {
 		boolean flag = false;
 		if (obj instanceof Student) {
 			Student arg = (Student)obj;
-			if (this.getId().equals(arg.getId()) || this.getPhone().equals(arg.getPhone())) {
+			if (super.getId().equals(arg.getId()) 
+					|| super.getPhone().equals(arg.getPhone())) 
 				flag = true;
-			}
 		}
 		return flag;
 	}
 	
-	public ScoreTable getScoreTable() { return scoreTable; } 
+	public ScoreTable getScoreTable() { return scoreTable; }
+	public void setScoreTable(ScoreTable st) { scoreTable = st; }
 }
