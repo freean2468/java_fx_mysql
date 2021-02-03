@@ -1,7 +1,10 @@
 /*
  * purpose : javafx - java - MySQL co-work project
  * 개발자 :송훈일 (Neil)
+ * 개발일자 : Feb 3, 2021
  * 실행 영상 : 
+ * 주석에 관해 : 에디터에 한글로 쓰는게 불편해서 영어로 쓴 부분도 있습니다.
+ * TODO : Connector/J가 정상적으로 작동하는 수준으로 구현되었는데 이후 DB Indexing, primary key & foreign key 활용까지 더 발전시켜보자.
  */
 package application;
 	

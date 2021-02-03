@@ -12,6 +12,7 @@ public class MySQLUtil {
 	
 	public static Connection getConnection() {
 		try {
+			// MySQL 드라이버 메소드 영역에 적
 			Class.forName(MYSQL_DRIVER);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -19,7 +20,9 @@ public class MySQLUtil {
 		
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(URL, "root", "1234");
+			// DB 정보는 숨겨야 한다.
+			// TODO : Properties를 이용해 보안을 강화할 수 있다.
+			connection = DriverManager.getConnection(URL, "root", "12345678");
 			
 			if (connection != null) {
 				System.out.println("connected to student schema");

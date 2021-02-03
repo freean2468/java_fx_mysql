@@ -1,7 +1,5 @@
 package data;
 
-import java.util.Objects;
-
 public class Student extends Person {
 	private ScoreTable scoreTable;
 	
@@ -26,7 +24,7 @@ public class Student extends Person {
 	
 	@Override
 	public int hashCode() {
-		// assume all student objects are equal at hashCode compare stage.
+		// assume all student objects are equal at the hashCode comparison stage.
 		return 0;
 	}
 	

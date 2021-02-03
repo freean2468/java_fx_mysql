@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+// JavaFX UI tableColumn에 값 바인딩을 위한 데이터 모델  
 public class StudentModelForJavaFX {
 	private SimpleStringProperty birthDate;
 	private SimpleStringProperty name;

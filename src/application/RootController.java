@@ -47,6 +47,7 @@ public class RootController implements Initializable {
 	
 	public static final int INITIAL_NUM = 5;
 	
+	// DB transaction 결과물을 담을 Set
 	private HashSet<Student> set = new HashSet<>();
 	
 	@FXML private TableView<StudentModelForJavaFX> tableView;
@@ -87,6 +88,8 @@ public class RootController implements Initializable {
 		
 		this.refreshTable();
 		
+		// 각 테이블 필드를 Factory 함수를 통해 생성되도록 각 Student field와 바인딩.
+		// 이를 위해 Student 클래스를 모델링한 StudentModelForJavaFX 클래스를 만듬.
 		@SuppressWarnings("unchecked")
 		TableColumn<StudentModelForJavaFX, String> tcId = (TableColumn<StudentModelForJavaFX, String>) tableView.getColumns().get(ID_COLUMN);
 		tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -220,7 +223,7 @@ public class RootController implements Initializable {
 
 		try {
 			Parent parent = FXMLLoader.load(getClass().getResource("../resources/form.fxml"));			
-			Button insertConfirmButton = (Button)parent.lookup("#confirm");
+			Button confirm = (Button)parent.lookup("#confirm");
 
 			TextField id = (TextField)parent.lookup("#id");
 			TextField name = (TextField)parent.lookup("#name");
@@ -246,7 +249,7 @@ public class RootController implements Initializable {
 			math.setText(String.valueOf(m.getEng()));
 			eng.setText(String.valueOf(m.getMath()));
 			
-			insertConfirmButton.setOnAction(e->{
+			confirm.setOnAction(e->{
 				try {
 					Student student = new Student(
 						birthdate.getText(),
@@ -271,8 +274,8 @@ public class RootController implements Initializable {
 				} 
 			});
 			
-			Button insertCancelButton = (Button)parent.lookup("#cancel");
-			insertCancelButton.setOnAction(e->dialog.close());
+			Button cancel = (Button)parent.lookup("#cancel");
+			cancel.setOnAction(e->dialog.close());
 			
 			Scene scene = new Scene(parent);
 			dialog.setScene(scene);
@@ -313,6 +316,7 @@ public class RootController implements Initializable {
 				TextField math = (TextField)parent.lookup("#math");
 				math.setDisable(true);
 				
+				// 아무 내용도 입력하지 않으면 select *
 				if (id.getText().equals("") &&
 					name.getText().equals("") &&
 					birthdate.getText().equals("") &&
@@ -430,6 +434,7 @@ public class RootController implements Initializable {
 		stage.close();
 	}
 	
+	// 상황에 따른 메세지를 팝업창으로 전달 
 	public void showMessage(Stage dialog, String message) {
 		Stage messageDialog = new Stage(StageStyle.UTILITY);
 		messageDialog.initModality(Modality.WINDOW_MODAL);
@@ -451,6 +456,11 @@ public class RootController implements Initializable {
 		}				
 	}
 	
+	// DB transaction 결과물을 가지고 있는 Set은 그 데이터가 수정될 때
+	// 다음과 같은 작업을 병행해줘야 하기 때문에 따로 함수들을 만듬.
+	// 1. DB transaction
+	// 2. set data 반영
+	// 3. UI data 모델 반영 
 	public boolean addIntoSet(Student s) {
 		boolean res = set.add(s);
 		if (res == true) {
@@ -550,6 +560,9 @@ public class RootController implements Initializable {
 		return res;
 	}
 	
+	// 쓸데없이 시간을 많이 잡아먹게 만든 부분,
+	// 당연히 합리적인 논리의 전개로 tableColumn 데이터가 바뀌면 바로바로 tableView에 반영이 될 줄 알았는데 그렇지가 않아서
+	// 직접 refresh()를 호출해줘야 한다;
 	public void refreshTable() {
 		ObservableList<StudentModelForJavaFX> tableList = FXCollections.observableArrayList();
 		
