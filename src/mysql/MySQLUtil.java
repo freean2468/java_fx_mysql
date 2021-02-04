@@ -1,28 +1,39 @@
 package mysql;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class MySQLUtil {
-	public static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
-	
-	// URL of schema which we will use
-	public static final String URL ="jdbc:mysql://localhost/student";
-	
 	public static Connection getConnection() {
+		Properties properties = new Properties();
+		String path = MySQLUtil.class.getResource("db.properties").getPath();
+		path = path.substring(1);		
 		try {
-			// MySQL 드라이버 메소드 영역에 적
-			Class.forName(MYSQL_DRIVER);
+			path = path.replaceAll("/", "\\\\");
+			properties.load(new FileReader(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			// MySQL 드라이버 메소드 영역에 적재 
+			Class.forName(properties.getProperty("MYSQL_DRIVER"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		Connection connection = null;
 		try {
-			// DB 정보는 숨겨야 한다.
-			// TODO : Properties를 이용해 보안을 강화할 수 있다.
-			connection = DriverManager.getConnection(URL, "root", "12345678");
+			connection = DriverManager.getConnection(
+					properties.getProperty("URL"), 
+					properties.getProperty("userName"),
+					properties.getProperty("password"));
 			
 			if (connection != null) {
 				System.out.println("connected to student schema");
