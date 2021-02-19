@@ -11,7 +11,7 @@
 
 <BorderPane prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RootController">
    <top>
-      <Label text="잘나가는 안드로이드 웹앱 6기" textAlignment="CENTER" BorderPane.alignment="CENTER">
+      <Label text="MySQL - Java - JavaFX 연동" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
             <Font size="50.0" />
          </font>
@@ -27,14 +27,16 @@
       <TableView fx:id="tableView" prefHeight="271.0" prefWidth="856.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn prefWidth="75.0" text="id" />
+          <TableColumn prefWidth="75.0" text="courseId" />
           <TableColumn prefWidth="75.0" text="name" />
             <TableColumn prefWidth="75.0" text="birthdate" />
             <TableColumn prefWidth="75.0" text="gender" />
             <TableColumn prefWidth="75.0" text="email" />
             <TableColumn prefWidth="75.0" text="phone" />
-            <TableColumn prefWidth="75.0" text="kor" />
-            <TableColumn prefWidth="75.0" text="eng" />
-            <TableColumn prefWidth="75.0" text="math" />
+            <TableColumn prefWidth="75.0" text="c" />
+            <TableColumn prefWidth="75.0" text="java" />
+            <TableColumn prefWidth="75.0" text="android" />
+            <TableColumn prefWidth="75.0" text="web" />
             <TableColumn prefWidth="75.0" text="total" />
             <TableColumn prefWidth="75.0" text="avg" />
             <TableColumn prefWidth="75.0" text="grade" />

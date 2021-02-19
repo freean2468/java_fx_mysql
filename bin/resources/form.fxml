@@ -16,6 +16,7 @@
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
+      <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="128.0" minHeight="0.0" prefHeight="28.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="267.0" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="300.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
@@ -26,25 +27,27 @@
       <RowConstraints maxHeight="264.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="264.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="264.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="264.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="id" />
-      <TextField fx:id="id" GridPane.columnIndex="1" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="name" GridPane.rowIndex="1" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="email" GridPane.rowIndex="4" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="gender" GridPane.rowIndex="3" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="birthdate" GridPane.rowIndex="2" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="phone" GridPane.rowIndex="5" />
-      <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <TextField fx:id="birthdate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <TextField fx:id="phone" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="kor" GridPane.rowIndex="6" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="eng" GridPane.rowIndex="7" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="math" GridPane.rowIndex="8" />
-      <TextField fx:id="kor" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <TextField fx:id="eng" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-      <TextField fx:id="math" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-      <ComboBox fx:id="email" prefHeight="22.0" prefWidth="303.0" visibleRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="id" GridPane.rowIndex="1" />
+      <TextField fx:id="id" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="name" GridPane.rowIndex="2" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="email" GridPane.rowIndex="5" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="gender" GridPane.rowIndex="4" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="birthdate" GridPane.rowIndex="3" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="phone" GridPane.rowIndex="6" />
+      <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <TextField fx:id="birthdate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <TextField fx:id="phone" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="c" GridPane.rowIndex="7" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="java" GridPane.rowIndex="8" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="android" GridPane.rowIndex="9" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="web" GridPane.rowIndex="11" />
+      <TextField fx:id="c" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <TextField fx:id="java" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <TextField fx:id="android" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+      <ComboBox fx:id="email" prefHeight="22.0" prefWidth="303.0" visibleRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="5">
       	<items>
       		<FXCollections fx:factory="observableArrayList">
                <String fx:value="@naver.com" />
@@ -53,9 +56,9 @@
       		</FXCollections>
       	</items>
       </ComboBox>
-      <Button fx:id="confirm" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="22.0" prefWidth="302.0" text="실행" GridPane.rowIndex="9" />
-      <Button fx:id="cancel" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="22.0" prefWidth="301.0" text="취소" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-      <ComboBox fx:id="gender" prefHeight="22.0" prefWidth="303.0" visibleRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <Button fx:id="confirm" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="22.0" prefWidth="302.0" text="실행" GridPane.rowIndex="11" />
+      <Button fx:id="cancel" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="22.0" prefWidth="301.0" text="취소" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+      <ComboBox fx:id="gender" prefHeight="22.0" prefWidth="303.0" visibleRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <items>
             <FXCollections fx:factory="observableArrayList">
       			<String fx:value="남" />
@@ -63,5 +66,9 @@
             </FXCollections>
          </items>
       </ComboBox>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="courseId" />
+      <TextField fx:id="courseId" GridPane.columnIndex="1" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="14.0" prefWidth="302.0" text="web" GridPane.rowIndex="10" />
+      <TextField fx:id="web" GridPane.columnIndex="1" GridPane.rowIndex="10" />
    </children>
 </GridPane>

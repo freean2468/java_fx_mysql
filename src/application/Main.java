@@ -1,10 +1,13 @@
-/*
- * purpose : javafx - java - MySQL co-work project
- * 개발자 :송훈일 (Neil)
- * 개발일자 : Feb 3, 2021
- * 실행 영상 : 
- * 주석에 관해 : 에디터에 한글로 쓰는게 불편해서 영어로 쓴 부분도 있습니다.
- * TODO : Connector/J가 정상적으로 작동하는 수준으로 구현되었는데 이후 DB Indexing, primary key & foreign key 활용까지 더 발전시켜보자.
+/**
+ * 
+ * @author 송훈일 (Neil Son)
+ * @version 0.1
+ * 개발 시작 일자 : 2021_02_3
+ * last_updated : 2021_02_19
+ * 목적 : MySQA과 java 연동 후 JavaFX로 출력
+ * GitHub : https://github.com/freean2468/java_fx_mysql
+ * 실행 영상 :
+ *  
  */
 package application;
 	
@@ -32,7 +35,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("../resources/application.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("JavaFX-Java-MySQL co-work project");
+			primaryStage.setTitle("JavaFX-Java-MySQL project");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

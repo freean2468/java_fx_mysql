@@ -18,7 +18,7 @@ public class Person implements Printable {
 		this(null, null, null, null, null, null);
 	}
 	
-	public Person(String birthdate, String name, String id, String gender, String email, String phone) {
+	public Person(String id, String name, String birthdate, String gender, String email, String phone) {
 		this.birthdate = birthdate;
 		this.name = name;
 		this.id = id;

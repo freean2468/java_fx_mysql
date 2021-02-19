@@ -7,11 +7,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/** 
+ * @apiNote db priperties 파일을 바탕으로 MySQL 최초 설정 담당 클래스
+ * 
+ * 첫 개발 일자 : 2021_02_03
+ * last_updated : 2021_02_19
+ *  
+ */
 public class MySQLUtil {
 	public static Connection getConnection() {
 		Properties properties = new Properties();
 		String path = MySQLUtil.class.getResource("db.properties").getPath();
-		path = path.substring(1);		
+		path = path.substring(1);
+		
 		try {
 			path = path.replaceAll("/", "\\\\");
 			properties.load(new FileReader(path));

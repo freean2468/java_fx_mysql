@@ -2,12 +2,20 @@ package data;
 
 import java.util.ArrayList;
 
+/** 
+ * @apiNote 학생 테이블이 가지고 있는 성적 계산을 담당하려 했던 클래스인데 
+ * 			이 모든 일을 DB에서 처리하면 된다 걸 알았으므로 필요가 없어졌다.
+ * 
+ * 첫 개발 일자 : 2021_02_03
+ * last_updated : 2021_02_19
+ *  
+ */
 public class ScoreTable implements Printable {
 	public static final int MAX_VALUE = 100;
 	public static final int MIN_VALUE = 0;
 	
 	enum Subjects {
-		KOR, ENG, MATH, LAST
+		C, JAVA, ANDROID, WEB, LAST
 	}
 	public static final int AVG_FLOAT_POINT_PLACE_EXP = 2;
 	
@@ -15,23 +23,25 @@ public class ScoreTable implements Printable {
 	private int rank;
 	
 	public ScoreTable() {
-		this(0, 0, 0);
+		this(0, 0, 0, 0);
 	}
 	
-	public ScoreTable(int kor, int eng, int math) {
+	public ScoreTable(int c, int java, int android, int web) {
 		scores = new ArrayList<Integer>(Subjects.LAST.ordinal());
 		for (int i = 0; i < Subjects.LAST.ordinal(); ++i) {
 			scores.add(0);
 		}
-		setKor(kor);
-		setEng(eng);
-		setMath(math);
+		
+		setC(c);
+		setJava(java);
+		setAndroid(android);
+		setWeb(web);
 	}
 	
 	@Override
 	public String toString() {
-		return "rank:" + getRank() + ", Kor:" + getKor() + ", Eng:" + getEng() + ", Math:"
-				+ getMath() + ", Total:" + getTotal() + ", Avg:" + getAvg() + ", grade:" + getGrade(); 
+		return "rank:" + getRank() + ", C:" + getC() + ", Java:" + getJava() + ", Android:"
+				+ getAndroid() + ", Web:" + getWeb() + ", Total:" + getTotal() + ", Avg:" + getAvg() + ", grade:" + getGrade(); 
 	}
 	
 	@Override
@@ -39,43 +49,56 @@ public class ScoreTable implements Printable {
 		System.out.println(this.toString());
 	}
 	
-	public void setKor(int kor) {
-		if (ScoreTable.MAX_VALUE < kor || kor < ScoreTable.MIN_VALUE) {
+	public void setC(int val) {
+		if (ScoreTable.MAX_VALUE < val || val < ScoreTable.MIN_VALUE) {
 			System.out.println("범위 초과");
-			scores.set(Subjects.KOR.ordinal(), (int)(Math.random()*(ScoreTable.MAX_VALUE+1)));
+			scores.set(Subjects.C.ordinal(), (int)(Math.random()*(ScoreTable.MAX_VALUE+1)));
 		} else {
-			scores.set(Subjects.KOR.ordinal(), kor);
+			scores.set(Subjects.C.ordinal(), val);
 		}
 	}
 	
-	public int getKor() {
-		return scores.get(Subjects.KOR.ordinal());
+	public int getC() {
+		return scores.get(Subjects.C.ordinal());
 	}
 	
-	public void setEng(int eng) {
-		if (ScoreTable.MAX_VALUE < eng || eng < ScoreTable.MIN_VALUE) {
+	public void setJava(int val) {
+		if (ScoreTable.MAX_VALUE < val || val < ScoreTable.MIN_VALUE) {
 			System.out.println("범위 초과");
-			scores.set(Subjects.ENG.ordinal(), (int)(Math.random()*(ScoreTable.MAX_VALUE+1)));
+			scores.set(Subjects.JAVA.ordinal(), (int)(Math.random()*(ScoreTable.MAX_VALUE+1)));
 		} else {
-			scores.set(Subjects.ENG.ordinal(), eng);
+			scores.set(Subjects.JAVA.ordinal(), val);
 		}
 	}
 	
-	public int getEng() {
-		return scores.get(Subjects.ENG.ordinal());
+	public int getJava() {
+		return scores.get(Subjects.JAVA.ordinal());
 	}
 	
-	public void setMath(int math) {
-		if (ScoreTable.MAX_VALUE < math || math < ScoreTable.MIN_VALUE) {
+	public void setWeb(int val) {
+		if (ScoreTable.MAX_VALUE < val || val < ScoreTable.MIN_VALUE) {
 			System.out.println("범위 초과");
-			scores.set(Subjects.MATH.ordinal(), (int)(Math.random()*(ScoreTable.MAX_VALUE+1)));
+			scores.set(Subjects.WEB.ordinal(), (int)(Math.random()*(ScoreTable.MAX_VALUE+1)));
 		} else {
-			scores.set(Subjects.MATH.ordinal(), math);
+			scores.set(Subjects.WEB.ordinal(), val);
 		}
 	}
 	
-	public int getMath() {
-		return scores.get(Subjects.MATH.ordinal());
+	public int getWeb() {
+		return scores.get(Subjects.WEB.ordinal());
+	}
+	
+	public void setAndroid(int val) {
+		if (ScoreTable.MAX_VALUE < val || val < ScoreTable.MIN_VALUE) {
+			System.out.println("범위 초과");
+			scores.set(Subjects.ANDROID.ordinal(), (int)(Math.random()*(ScoreTable.MAX_VALUE+1)));
+		} else {
+			scores.set(Subjects.ANDROID.ordinal(), val);
+		}
+	}
+	
+	public int getAndroid() {
+		return scores.get(Subjects.ANDROID.ordinal());
 	}
 	
 	public void setRank(int rank) {

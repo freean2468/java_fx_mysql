@@ -1,14 +1,28 @@
 package data;
 
+/** 
+ * @apiNote Student 구조를 담당할 클래스, value는 StudentVO에게 일임.
+ * 
+ * 첫 개발 일자 : 2021_02_03
+ * last_updated : 2021_02_19
+ *  
+ */
 public class Student extends Person {
 	private ScoreTable scoreTable;
+	private int courseId;
 	
 	public Student() {
-		this(null, null, null, null, null, null, null);
+		this(null, null, 0, null, null, null, null, null);
 	}
 	
-	public Student(String birthdate, String name, String id, String gender, String email, String phone, ScoreTable scoreTable) {
-		super(birthdate, name, id, gender, email, phone);
+	/*
+	 * public Student(String birthdate, String name, String id, String gender, 
+			String email, String phone, ScoreTable scoreTable, int courseId) {
+	 */
+	public Student(String id, String name, int courseId, String birthdate, String gender, 
+			String email, String phone, ScoreTable scoreTable) {
+		super(id, name, birthdate, gender, email, phone);
+		this.courseId = courseId;
 		this.scoreTable = scoreTable;
 	}
 	
@@ -42,4 +56,7 @@ public class Student extends Person {
 	
 	public ScoreTable getScoreTable() { return scoreTable; }
 	public void setScoreTable(ScoreTable st) { scoreTable = st; }
+	
+	public int getCourseId() { return courseId; }
+	public void setCourseId(int courseId) { this.courseId = courseId; }
 }

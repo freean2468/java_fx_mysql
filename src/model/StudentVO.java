@@ -5,32 +5,43 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-// JavaFX UI tableColumn에 값 바인딩을 위한 데이터 모델  
-public class StudentModelForJavaFX {
+/** 
+ * @apiNote JavaFX UI tableColumn에 값 바인딩을 위해 값만을 가지고 있을 StudentVO 클래스.
+ * 			실제 Student 구조는 Student 클래스에서 담당
+ * 
+ * 첫 개발 일자 : 2021_02_03
+ * last_updated : 2021_02_19
+ *  
+ */ 
+public class StudentVO {
 	private SimpleStringProperty birthDate;
 	private SimpleStringProperty name;
 	private SimpleStringProperty id;
 	private SimpleStringProperty gender;
 	private SimpleStringProperty email;
 	private SimpleStringProperty phone;
-	private SimpleIntegerProperty kor;
-	private SimpleIntegerProperty eng;
-	private SimpleIntegerProperty math;
+	private SimpleIntegerProperty courseId;
+	private SimpleIntegerProperty c;
+	private SimpleIntegerProperty java;
+	private SimpleIntegerProperty android;
+	private SimpleIntegerProperty web;
 	private SimpleIntegerProperty total;
 	private SimpleDoubleProperty avg;
 	private SimpleStringProperty grade;
 	
-	public StudentModelForJavaFX(Student s) {
+	public StudentVO(Student s) {
 		this.birthDate = new SimpleStringProperty(s.getBirthdate());
 		this.name = new SimpleStringProperty(s.getName());
 		this.id = new SimpleStringProperty(s.getId());
+		this.courseId = new SimpleIntegerProperty(s.getCourseId());
 		this.gender = new SimpleStringProperty(s.getGender());
 		this.email = new SimpleStringProperty(s.getEmail());
 		this.phone = new SimpleStringProperty(s.getPhone());
 		this.grade = new SimpleStringProperty(s.getScoreTable().getGrade());
-		this.kor = new SimpleIntegerProperty(s.getScoreTable().getKor());
-		this.eng = new SimpleIntegerProperty(s.getScoreTable().getEng());
-		this.math = new SimpleIntegerProperty(s.getScoreTable().getMath());
+		this.c = new SimpleIntegerProperty(s.getScoreTable().getC());
+		this.java = new SimpleIntegerProperty(s.getScoreTable().getJava());
+		this.android = new SimpleIntegerProperty(s.getScoreTable().getAndroid());
+		this.web = new SimpleIntegerProperty(s.getScoreTable().getWeb());
 		this.total = new SimpleIntegerProperty(s.getScoreTable().getTotal());
 		this.avg = new SimpleDoubleProperty(s.getScoreTable().getAvg());
 	}
@@ -48,12 +59,17 @@ public class StudentModelForJavaFX {
 	public void setPhone(String phone) { this.phone.set(phone); }
 	public String getGrade() { return grade.get(); }
 	public void setGrade(String grade) { this.grade.set(grade); }
-	public int getKor() { return kor.get(); }
-	public void setKor(int kor) { this.kor.set(kor); }
-	public int getEng() { return eng.get(); }
-	public void setEng(int eng) { this.eng.set(eng); }
-	public int getMath() { return math.get(); }
-	public void setMath(int math) { this.math.set(math); }
+	
+
+	public int getCourseId() { return courseId.get(); }
+	public int getC() { return c.get(); }
+	public void setC(int val) { this.c.set(val); }
+	public int getJava() { return java.get(); }
+	public void setJava(int val) { this.java.set(val); }
+	public int getAndroid() { return android.get(); }
+	public void setAndroid(int val) { this.android.set(val); }
+	public int getWeb() { return web.get(); }
+	public void setWeb(int val) { this.web.set(val); }
 	public int getTotal() { return total.get(); }
 	public void setTotal(int total) { this.total.set(total); }
 	public double getAvg() { return avg.get(); }
