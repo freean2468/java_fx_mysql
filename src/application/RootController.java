@@ -34,7 +34,6 @@ import mysql.MySQLQueries;
  * @apiNote JavaFX UI 컨트롤을 담당
  * 			싱글톤으로 선언될 수 없다.
  * 
- * last_updated : 2021_02_19
  *  
  */
 public class RootController implements Initializable {

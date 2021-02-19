@@ -6,8 +6,6 @@ import java.util.ArrayList;
  * @apiNote 학생 테이블이 가지고 있는 성적 계산을 담당하려 했던 클래스인데 
  * 			이 모든 일을 DB에서 처리하면 된다 걸 알았으므로 필요가 없어졌다.
  * 
- * 첫 개발 일자 : 2021_02_03
- * last_updated : 2021_02_19
  *  
  */
 public class ScoreTable implements Printable {

@@ -13,8 +13,6 @@ import data.Student;
 /** 
  * @apiNote MySQL와 연결 - 쿼리 - 연결 종료 를 담당할 클래스
  * 
- * 첫 개발 일자 : 2021_02_03
- * last_updated : 2021_02_19
  *  
  */
 public class MySQLQueries {

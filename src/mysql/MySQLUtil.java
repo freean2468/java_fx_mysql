@@ -10,8 +10,6 @@ import java.util.Properties;
 /** 
  * @apiNote db priperties 파일을 바탕으로 MySQL 최초 설정 담당 클래스
  * 
- * 첫 개발 일자 : 2021_02_03
- * last_updated : 2021_02_19
  *  
  */
 public class MySQLUtil {

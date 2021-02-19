@@ -2,8 +2,6 @@
  * 
  * @author 송훈일 (Neil Son)
  * @version 0.1
- * 개발 시작 일자 : 2021_02_3
- * last_updated : 2021_02_19
  * 목적 : MySQA과 java 연동 후 JavaFX로 출력
  * GitHub : https://github.com/freean2468/java_fx_mysql
  * 실행 영상 :

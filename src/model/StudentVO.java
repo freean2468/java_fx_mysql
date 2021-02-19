@@ -9,8 +9,6 @@ import javafx.beans.property.SimpleStringProperty;
  * @apiNote JavaFX UI tableColumn에 값 바인딩을 위해 값만을 가지고 있을 StudentVO 클래스.
  * 			실제 Student 구조는 Student 클래스에서 담당
  * 
- * 첫 개발 일자 : 2021_02_03
- * last_updated : 2021_02_19
  *  
  */ 
 public class StudentVO {
