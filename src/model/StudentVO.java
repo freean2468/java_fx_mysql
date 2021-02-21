@@ -60,6 +60,7 @@ public class StudentVO {
 	
 
 	public int getCourseId() { return courseId.get(); }
+	public void setCourseId(int val) { this.courseId.set(val); }
 	public int getC() { return c.get(); }
 	public void setC(int val) { this.c.set(val); }
 	public int getJava() { return java.get(); }

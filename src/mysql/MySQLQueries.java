@@ -1,13 +1,15 @@
 package mysql;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import data.ScoreTable;
+import data.ScoreTableVO;
 import data.Student;
 
 /** 
@@ -16,8 +18,25 @@ import data.Student;
  *  
  */
 public class MySQLQueries {
+	/**
+	 * `mirae_institution_db`.`student_tbl` 테이블 필드 binding을 위한 상수 선언
+	 */
+	public static final int ID_COLUMN = 1;
+	public static final int NAME_COLUMN = 2;
+	public static final int COURSE_ID_COLUMN = 3;
+	public static final int BIRTHDATE_COLUMN = 4;
+	public static final int GENDER_COLUMN = 5;
+	public static final int EMAIL_COLUMN = 6;
+	public static final int PHONE_COLUMN = 7;
+	public static final int C_COLUMN = 8;
+	public static final int JAVA_COLUMN = 9;
+	public static final int ANDROID_COLUMN = 10;
+	public static final int WEB_COLUMN = 11;
+	public static final int TOTAL_COLUMN = 12;
+	public static final int AVG_COLUMN = 13;
+	public static final int GRADE_COLUMN = 14;
 	
-	public static final String _TABLE = "student_tbl";
+	public static final String _TABLE = MySQLUtil.getInstance().getTableName();
 	
 	/**
 	 * @apiNote MySQL create table 호출 함수
@@ -26,11 +45,11 @@ public class MySQLQueries {
 	 */
 	public static boolean createTable(String name) {
 		boolean flag = false;
-		Connection connection = MySQLUtil.getConnection();
+		Connection connection = MySQLUtil.getInstance().getConnection();
 		String createTableQuery = "create table " + name + "("
 				+ "`id` varchar(10) NOT NULL,"
 				+ "`name` varchar(10) not null,"
-				+ "`course_id` int not null,"
+				+ "`course_id` bigint not null,"
 				+ "`birthdate` varchar(10) not null,"
 				+ "`gender` varchar(1) not null,"
 				+ "`email` varchar(40) not null,"
@@ -39,18 +58,16 @@ public class MySQLQueries {
 				+ "`java` int not null,"
 				+ "`android` int not null,"
 				+ "`web` int not null,"
+				+ "`total` int not null,"
+				+ "`avg` double not null,"
+				+ "`grade` varchar(1) not null,"
 				+ "constraint `pk_id` PRIMARY KEY (`id`),"
 				+ "constraint `fk_course_id` foreign key(`course_id`) references `course_tbl`(`id`) on delete cascade on update cascade"
 				+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
-		String dropTableQuery = "drop table if exists student";
 		
 		PreparedStatement preparedStatement = null;
 		
 		try {
-			preparedStatement = connection.prepareStatement(dropTableQuery);
-			preparedStatement.executeUpdate();
-			preparedStatement.close();
-			
 			preparedStatement = connection.prepareStatement(createTableQuery);
 			int count = preparedStatement.executeUpdate();
 			if (count == 0) {
@@ -60,7 +77,9 @@ public class MySQLQueries {
 				System.out.println("Create table " + name + " failed.");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			if (!e.getMessage().equals("Table '" + _TABLE + "' already exists")) {
+				e.printStackTrace();
+			}
 		} finally {
 			try {
 				if (preparedStatement != null) preparedStatement.close();
@@ -74,51 +93,69 @@ public class MySQLQueries {
 	}
 	
 	/**
-	 * @apiNote student_tbl에 insert 쿼리 함수
+	 * @apiNote 미리 생성한 `proc_insert_then_calc` 프로시져 호출 함수. 
 	 * @param s 삽입하려는 Student 객체
 	 * @return 성공 true 실패 false
 	 */
-	public static boolean insertStudent(Student s) {
-		boolean flag = false;
-		Connection connection = MySQLUtil.getConnection();
-		String insertQuery = "insert into " 	
-			+ _TABLE
-			+ "(`id`, `name`, `course_id`, `birthdate`, `gender`, `email`, `phone`, `c`, `java`, `android`, `web`) "
-			+ " value(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	public static Student insertStudent(Student s) {
+		Connection connection = MySQLUtil.getInstance().getConnection();;
+		String procCall = "{call `proc_insert_then_calc`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 		
-		PreparedStatement preparedStatement = null;
+		CallableStatement callableStatement = null;
+		Student resStudent = null;
+		
 		try {
-			preparedStatement = connection.prepareStatement(insertQuery);
-			preparedStatement.setString(1, s.getId());
-			preparedStatement.setString(2, s.getName());
-			preparedStatement.setInt(3, s.getCourseId());
-			preparedStatement.setString(4, s.getBirthdate());
-			preparedStatement.setString(5, s.getGender());
-			preparedStatement.setString(6, s.getEmail());
-			preparedStatement.setString(7, s.getPhone());
-			preparedStatement.setInt(8, s.getScoreTable().getC());
-			preparedStatement.setInt(9, s.getScoreTable().getJava());
-			preparedStatement.setInt(10, s.getScoreTable().getAndroid());
-			preparedStatement.setInt(11, s.getScoreTable().getWeb());
+			callableStatement = connection.prepareCall(procCall);
+			callableStatement.setString(ID_COLUMN, s.getId());
+			callableStatement.setString(NAME_COLUMN, s.getName());
+			callableStatement.setInt(COURSE_ID_COLUMN, s.getCourseId());
+			callableStatement.setString(BIRTHDATE_COLUMN, s.getBirthdate());
+			callableStatement.setString(GENDER_COLUMN, s.getGender());
+			callableStatement.setString(EMAIL_COLUMN, s.getEmail());
+			callableStatement.setString(PHONE_COLUMN, s.getPhone());
+			callableStatement.setInt(C_COLUMN, s.getScoreTable().getC());
+			callableStatement.setInt(JAVA_COLUMN, s.getScoreTable().getJava());
+			callableStatement.setInt(ANDROID_COLUMN, s.getScoreTable().getAndroid());
+			callableStatement.setInt(WEB_COLUMN, s.getScoreTable().getWeb());
 			
-			int count = preparedStatement.executeUpdate();
-			if (count == 1) {
-				System.out.println("Insert Completed");
-				flag = true;
+			boolean res = callableStatement.execute();
+			if (res) {
+				System.out.println("call `proc_insert_then_calc` Completed");
+				
+				ResultSet resSet = callableStatement.getResultSet();
+				
+				resSet.next();
+				
+				resStudent = new Student(
+								resSet.getString(ID_COLUMN),
+								resSet.getString(NAME_COLUMN),
+								Integer.parseInt(resSet.getString(COURSE_ID_COLUMN)),
+								resSet.getString(BIRTHDATE_COLUMN),
+								resSet.getString(GENDER_COLUMN),
+								resSet.getString(EMAIL_COLUMN),
+								resSet.getString(PHONE_COLUMN),
+								new ScoreTableVO(resSet.getInt(C_COLUMN),resSet.getInt(JAVA_COLUMN)
+												, resSet.getInt(ANDROID_COLUMN),resSet.getInt(WEB_COLUMN)
+												, resSet.getInt(TOTAL_COLUMN), resSet.getDouble(AVG_COLUMN)
+												, resSet.getString(GRADE_COLUMN))
+							); 
 			} else {
-				System.out.println("Insert Failed");
+				System.out.println("call `proc_insert_then_calc` Failed");
 			}
+		} catch (SQLIntegrityConstraintViolationException cve) {
+			System.out.println("제약 조건 위반 : " + cve.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (preparedStatement != null) preparedStatement.close();
+				if (callableStatement != null) callableStatement.close();
 				if (connection != null) connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return flag;
+		
+		return resStudent;
 	}
 	
 	/**
@@ -126,45 +163,64 @@ public class MySQLQueries {
 	 * @param s 갱신하려는 Student 객체
 	 * @return 성공 true 실패 false
 	 */
-	public static boolean updateStudentWhereId(Student s) {
-		boolean flag = false;
-		Connection connection = MySQLUtil.getConnection();
-		String updateQuery = "update " + _TABLE + " set name=?, course_id=?, birthdate=?, gender=?, email=?, phone=?,  "
-				+ "c=?, java=?, android=?, web=? where id = ?";
+	public static Student updateStudentWhereId(Student s) {
+		Connection connection = MySQLUtil.getInstance().getConnection();
+		String procCall = "{call `proc_update_then_calc`(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 		
-		PreparedStatement preparedStatement = null;
+		CallableStatement callableStatement = null;
+		Student resStudent = null;
+		
 		try {
-			preparedStatement = connection.prepareStatement(updateQuery);
-			preparedStatement.setString(1, s.getName());
-			preparedStatement.setInt(2, s.getCourseId());
-			preparedStatement.setString(3, s.getBirthdate());
-			preparedStatement.setString(4, s.getGender());
-			preparedStatement.setString(5, s.getEmail());
-			preparedStatement.setString(6, s.getPhone());
-			preparedStatement.setInt(7, s.getScoreTable().getC());
-			preparedStatement.setInt(8, s.getScoreTable().getJava());
-			preparedStatement.setInt(9, s.getScoreTable().getAndroid());
-			preparedStatement.setInt(10, s.getScoreTable().getWeb());
-			preparedStatement.setString(11, s.getId());
+			callableStatement = connection.prepareCall(procCall);
+			callableStatement.setString(ID_COLUMN, s.getId());
+			callableStatement.setString(NAME_COLUMN, s.getName());
+			callableStatement.setInt(COURSE_ID_COLUMN, s.getCourseId());
+			callableStatement.setString(BIRTHDATE_COLUMN, s.getBirthdate());
+			callableStatement.setString(GENDER_COLUMN, s.getGender());
+			callableStatement.setString(EMAIL_COLUMN, s.getEmail());
+			callableStatement.setString(PHONE_COLUMN, s.getPhone());
+			callableStatement.setInt(C_COLUMN, s.getScoreTable().getC());
+			callableStatement.setInt(JAVA_COLUMN, s.getScoreTable().getJava());
+			callableStatement.setInt(ANDROID_COLUMN, s.getScoreTable().getAndroid());
+			callableStatement.setInt(WEB_COLUMN, s.getScoreTable().getWeb());
 			
-			int count = preparedStatement.executeUpdate();
-			if (count == 1) {
-				System.out.println("Update Completed");
-				flag = true;
+			boolean res = callableStatement.execute();
+			if (res) {
+				System.out.println("call `proc_update_then_calc` Completed");
+				
+				ResultSet resSet = callableStatement.getResultSet();
+				
+				resSet.next();
+				
+				resStudent = new Student(
+								resSet.getString(ID_COLUMN),
+								resSet.getString(NAME_COLUMN),
+								Integer.parseInt(resSet.getString(COURSE_ID_COLUMN)),
+								resSet.getString(BIRTHDATE_COLUMN),
+								resSet.getString(GENDER_COLUMN),
+								resSet.getString(EMAIL_COLUMN),
+								resSet.getString(PHONE_COLUMN),
+								new ScoreTableVO(resSet.getInt(C_COLUMN),resSet.getInt(JAVA_COLUMN)
+												, resSet.getInt(ANDROID_COLUMN),resSet.getInt(WEB_COLUMN)
+												, resSet.getInt(TOTAL_COLUMN), resSet.getDouble(AVG_COLUMN)
+												, resSet.getString(GRADE_COLUMN))
+							); 
 			} else {
-				System.out.println("Update Failed");
+				System.out.println("call `proc_update_then_calc` Failed");
 			}
+		} catch (SQLIntegrityConstraintViolationException cve) {
+			System.out.println("제약 조건 위반 : " + cve.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (preparedStatement != null) preparedStatement.close();
+				if (callableStatement != null) callableStatement.close();
 				if (connection != null) connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return flag;
+		return resStudent;
 	}
 
 	/**
@@ -182,7 +238,7 @@ public class MySQLQueries {
 	public static boolean selectStudent(HashSet<Student> set, String id, int courseId, String name,
 								String birthdate, String gender, String email, String phone) {
 		boolean flag = false;
-		Connection connection = MySQLUtil.getConnection();
+		Connection connection = MySQLUtil.getInstance().getConnection();
 				
 		String query = "select * from " + _TABLE + " where ";
 		
@@ -211,17 +267,21 @@ public class MySQLQueries {
 			set.clear();
 			while(resSet.next()) {
 				set.add(new Student(
-					resSet.getString(1),
-					resSet.getString(2),
-					Integer.parseInt(resSet.getString(3)),
-					resSet.getString(4),
-					resSet.getString(5),
-					resSet.getString(6),
-					resSet.getString(7),
-					new ScoreTable(resSet.getInt(8),resSet.getInt(9),resSet.getInt(10),resSet.getInt(11))
+					resSet.getString(ID_COLUMN),
+					resSet.getString(NAME_COLUMN),
+					Integer.parseInt(resSet.getString(COURSE_ID_COLUMN)),
+					resSet.getString(BIRTHDATE_COLUMN),
+					resSet.getString(GENDER_COLUMN),
+					resSet.getString(EMAIL_COLUMN),
+					resSet.getString(PHONE_COLUMN),
+					new ScoreTableVO(resSet.getInt(C_COLUMN),resSet.getInt(JAVA_COLUMN)
+									, resSet.getInt(ANDROID_COLUMN),resSet.getInt(WEB_COLUMN)
+									, resSet.getInt(TOTAL_COLUMN), resSet.getDouble(AVG_COLUMN)
+									, resSet.getString(GRADE_COLUMN))
 				));
 			}
 			
+			System.out.println("selectStudent completed");
 			flag = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -244,7 +304,7 @@ public class MySQLQueries {
 	public static boolean selectStudent(HashSet<Student> set) {
 
 		boolean flag = false;
-		Connection connection = MySQLUtil.getConnection();
+		Connection connection = MySQLUtil.getInstance().getConnection();
 		String selectQuery = "select * from " + _TABLE;
 		
 		PreparedStatement preparedStatement = null;
@@ -258,17 +318,21 @@ public class MySQLQueries {
 			set.clear();
 			while(resSet.next()) {
 				set.add(new Student(
-					resSet.getString(1),
-					resSet.getString(2),
-					Integer.parseInt(resSet.getString(3)),
-					resSet.getString(4),
-					resSet.getString(5),
-					resSet.getString(6),
-					resSet.getString(7),
-					new ScoreTable(resSet.getInt(8),resSet.getInt(9),resSet.getInt(10),resSet.getInt(11))
+					resSet.getString(ID_COLUMN),
+					resSet.getString(NAME_COLUMN),
+					Integer.parseInt(resSet.getString(COURSE_ID_COLUMN)),
+					resSet.getString(BIRTHDATE_COLUMN),
+					resSet.getString(GENDER_COLUMN),
+					resSet.getString(EMAIL_COLUMN),
+					resSet.getString(PHONE_COLUMN),
+					new ScoreTableVO(resSet.getInt(C_COLUMN),resSet.getInt(JAVA_COLUMN)
+									, resSet.getInt(ANDROID_COLUMN),resSet.getInt(WEB_COLUMN)
+									, resSet.getInt(TOTAL_COLUMN), resSet.getDouble(AVG_COLUMN)
+									, resSet.getString(GRADE_COLUMN))
 				));
 			}
 			
+			System.out.println("selectStudent completed");
 			flag = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -290,7 +354,7 @@ public class MySQLQueries {
 	 */
 	public static boolean selectStudentOrderById(ArrayList<Student> list) {
 		boolean flag = false;
-		Connection connection = MySQLUtil.getConnection();
+		Connection connection = MySQLUtil.getInstance().getConnection();
 		String selectQuery = "select * from " + _TABLE + " order by id";
 		
 		PreparedStatement preparedStatement = null;
@@ -304,17 +368,21 @@ public class MySQLQueries {
 			list.clear();
 			while(resSet.next()) {
 				list.add(new Student(
-					resSet.getString(1),
-					resSet.getString(2),
-					Integer.parseInt(resSet.getString(3)),
-					resSet.getString(4),
-					resSet.getString(5),
-					resSet.getString(6),
-					resSet.getString(7),
-					new ScoreTable(resSet.getInt(8),resSet.getInt(9),resSet.getInt(10),resSet.getInt(11))
+					resSet.getString(ID_COLUMN),
+					resSet.getString(NAME_COLUMN),
+					Integer.parseInt(resSet.getString(COURSE_ID_COLUMN)),
+					resSet.getString(BIRTHDATE_COLUMN),
+					resSet.getString(GENDER_COLUMN),
+					resSet.getString(EMAIL_COLUMN),
+					resSet.getString(PHONE_COLUMN),
+					new ScoreTableVO(resSet.getInt(C_COLUMN),resSet.getInt(JAVA_COLUMN)
+									, resSet.getInt(ANDROID_COLUMN),resSet.getInt(WEB_COLUMN)
+									, resSet.getInt(TOTAL_COLUMN), resSet.getDouble(AVG_COLUMN)
+									, resSet.getString(GRADE_COLUMN))
 				));
 			}
 			
+			System.out.println("selectStudent orderby completed");
 			flag = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -336,7 +404,7 @@ public class MySQLQueries {
 	 */
 	public static boolean deleteStudentById(String id) {
 		boolean flag = false;
-		Connection connection = MySQLUtil.getConnection();
+		Connection connection = MySQLUtil.getInstance().getConnection();
 		
 		String deleteQuery = "delete from " + _TABLE + " where id = ?";
 		PreparedStatement preparedStatement = null;

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RootController">
+<BorderPane prefHeight="900.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RootController">
    <top>
       <Label text="MySQL - Java - JavaFX 연동" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
@@ -27,8 +27,8 @@
       <TableView fx:id="tableView" prefHeight="271.0" prefWidth="856.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn prefWidth="75.0" text="id" />
-          <TableColumn prefWidth="75.0" text="courseId" />
           <TableColumn prefWidth="75.0" text="name" />
+          <TableColumn prefWidth="75.0" text="courseId" />
             <TableColumn prefWidth="75.0" text="birthdate" />
             <TableColumn prefWidth="75.0" text="gender" />
             <TableColumn prefWidth="75.0" text="email" />
@@ -47,11 +47,11 @@
       <AnchorPane prefHeight="100.0" prefWidth="641.0" BorderPane.alignment="CENTER">
          <children>
             <Button alignment="CENTER" layoutX="100.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleInsert" prefHeight="40.0" prefWidth="80.0" text="입력" />
-            <Button alignment="CENTER" layoutX="225.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="40.0" prefWidth="80.0" text="수정" />
-            <Button alignment="CENTER" layoutX="600.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleDelete" prefHeight="40.0" prefWidth="80.0" text="삭제" />
-            <Button alignment="CENTER" layoutX="350.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="40.0" prefWidth="80.0" text="검색" />
-            <Button alignment="CENTER" layoutX="475.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleSort" prefHeight="40.0" prefWidth="80.0" text="정렬" />
-            <Button alignment="CENTER" layoutX="720.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleQuit" prefHeight="40.0" prefWidth="80.0" text="종료" />
+            <Button alignment="CENTER" layoutX="264.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="40.0" prefWidth="80.0" text="수정" />
+            <Button alignment="CENTER" layoutX="725.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleDelete" prefHeight="40.0" prefWidth="80.0" text="삭제" />
+            <Button alignment="CENTER" layoutX="418.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="40.0" prefWidth="80.0" text="검색" />
+            <Button alignment="CENTER" layoutX="574.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleSort" prefHeight="40.0" prefWidth="80.0" text="정렬" />
+            <Button alignment="CENTER" layoutX="868.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleQuit" prefHeight="40.0" prefWidth="80.0" text="종료" />
          </children>
       </AnchorPane>
    </bottom>

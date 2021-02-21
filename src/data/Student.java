@@ -6,7 +6,7 @@ package data;
  *  
  */
 public class Student extends Person {
-	private ScoreTable scoreTable;
+	private ScoreTableVO scoreTable;
 	private int courseId;
 	
 	public Student() {
@@ -18,7 +18,7 @@ public class Student extends Person {
 			String email, String phone, ScoreTable scoreTable, int courseId) {
 	 */
 	public Student(String id, String name, int courseId, String birthdate, String gender, 
-			String email, String phone, ScoreTable scoreTable) {
+			String email, String phone, ScoreTableVO scoreTable) {
 		super(id, name, birthdate, gender, email, phone);
 		this.courseId = courseId;
 		this.scoreTable = scoreTable;
@@ -52,8 +52,8 @@ public class Student extends Person {
 		return flag;
 	}
 	
-	public ScoreTable getScoreTable() { return scoreTable; }
-	public void setScoreTable(ScoreTable st) { scoreTable = st; }
+	public ScoreTableVO getScoreTable() { return scoreTable; }
+	public void setScoreTable(ScoreTableVO st) { scoreTable = st; }
 	
 	public int getCourseId() { return courseId; }
 	public void setCourseId(int courseId) { this.courseId = courseId; }

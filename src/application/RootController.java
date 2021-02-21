@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import data.Person;
-import data.ScoreTable;
+import data.ScoreTableVO;
 import data.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.StudentVO;
 import mysql.MySQLQueries;
+import mysql.MySQLUtil;
 
 /** 
  * @apiNote JavaFX UI 컨트롤을 담당
@@ -38,7 +39,7 @@ import mysql.MySQLQueries;
  */
 public class RootController implements Initializable {
 	/**
-	 * `mirae_institution_db`.`student_tbl` 테이블 필드 상수 선언
+	 * `mirae_institution_db`.`student_tbl` 테이블 필드와 java_fx table view와의 binding을 위한 상수 선언
 	 */
 	public static final int ID_COLUMN = 0;
 	public static final int NAME_COLUMN = 1;
@@ -69,7 +70,7 @@ public class RootController implements Initializable {
 		System.out.println(Thread.currentThread().getName() + "'s calling initialize");
 		
 
-		if (MySQLQueries.createTable("student_tbl")) {
+		if (MySQLQueries.createTable(MySQLUtil.getInstance().getTableName())) {
 			//
 			// 테이블이 비어있다면 자동으로 생성해주는 부분.
 			//
@@ -98,7 +99,7 @@ public class RootController implements Initializable {
 			//
 			// 테이블이 비어있지 않다면 그냥 모두 가져온다
 			//
-			System.out.println("select * from student_tbl");
+			System.out.println("select * from " + MySQLUtil.getInstance().getTableName());
 			MySQLQueries.selectStudent(set);
 		}
 		
@@ -142,7 +143,7 @@ public class RootController implements Initializable {
 						gender.getValue(),
 						id.getText()+email.getValue(),
 						phone.getText(),
-						new ScoreTable(Integer.parseInt(c.getText()), 
+						new ScoreTableVO(Integer.parseInt(c.getText()), 
 								Integer.parseInt(java.getText()), 
 								Integer.parseInt(android.getText()),
 								Integer.parseInt(web.getText()))
@@ -221,7 +222,7 @@ public class RootController implements Initializable {
 						gender.getValue(),
 						id.getText()+email.getValue(),
 						phone.getText(),
-						new ScoreTable(Integer.parseInt(c.getText()), 
+						new ScoreTableVO(Integer.parseInt(c.getText()), 
 								Integer.parseInt(java.getText()), 
 								Integer.parseInt(android.getText()),
 								Integer.parseInt(web.getText()))
@@ -446,13 +447,17 @@ public class RootController implements Initializable {
 	 * @return 정상적으로 넣었으면 true, 이미 존재하면 false 반환
 	 */
 	public boolean addIntoSet(Student s) {
-		boolean res = set.add(s);
-		if (res == true) {
+		boolean res = false;
+		Student resStudent = MySQLQueries.insertStudent(s);
+		
+		if (resStudent != null) {
+			res = set.add(resStudent);
+			
 			ObservableList<StudentVO> tableList = tableView.getItems();
-			tableList.add(new StudentVO(s));
+			tableList.add(new StudentVO(resStudent));
 			tableView.setItems(tableList);
-			MySQLQueries.insertStudent(s);
-		}
+		} 
+		
 		return res;
 	}
 	
@@ -500,37 +505,43 @@ public class RootController implements Initializable {
 		while(itr.hasNext()) {
 			Student item = itr.next();
 			if (s.getId().equals(item.getId())) {
-				item.setBirthdate(s.getBirthdate());
-				item.setCourseId(s.getCourseId());
-				item.setEmail(s.getEmail());
-				item.setName(s.getName());
-				item.setGender(s.getGender());
-				item.setPhone(s.getPhone());
-				item.setScoreTable(s.getScoreTable());
-				MySQLQueries.updateStudentWhereId(s);
-				res = true;
-				ObservableList<StudentVO> tableList = tableView.getItems();
-				Iterator<StudentVO> mItr = tableList.iterator();
-								
-				while (mItr.hasNext()) {
-					StudentVO m = mItr.next();
-					if (s.getId().equals(m.getId())) {
-						m.setBirthDate(s.getBirthdate());
-						m.setEmail(s.getEmail());
-						m.setGender(s.getGender());
-						m.setGrade(s.getGender());
-						m.setName(s.getName());
-						m.setPhone(s.getPhone());
-						m.setC(s.getScoreTable().getC());
-						m.setJava(s.getScoreTable().getJava());
-						m.setAndroid(s.getScoreTable().getAndroid());
-						m.setWeb(s.getScoreTable().getWeb());
-						m.setTotal(s.getScoreTable().getTotal());
-						m.setAvg(s.getScoreTable().getAvg());
+				Student resStudent = MySQLQueries.updateStudentWhereId(s);
+				
+				if (resStudent != null) {
+					item.setBirthdate(resStudent.getBirthdate());
+					item.setCourseId(resStudent.getCourseId());
+					item.setEmail(resStudent.getEmail());
+					item.setName(resStudent.getName());
+					item.setGender(resStudent.getGender());
+					item.setPhone(resStudent.getPhone());
+					item.setScoreTable(resStudent.getScoreTable());
+					
+					res = true;
+					ObservableList<StudentVO> tableList = tableView.getItems();
+					Iterator<StudentVO> mItr = tableList.iterator();
+									
+					while (mItr.hasNext()) {
+						StudentVO m = mItr.next();
+						if (resStudent.getId().equals(m.getId())) {
+							m.setCourseId(resStudent.getCourseId());
+							m.setBirthDate(resStudent.getBirthdate());
+							m.setEmail(resStudent.getEmail());
+							m.setGender(resStudent.getGender());
+							m.setName(resStudent.getName());
+							m.setPhone(resStudent.getPhone());
+							m.setC(resStudent.getScoreTable().getC());
+							m.setJava(resStudent.getScoreTable().getJava());
+							m.setAndroid(resStudent.getScoreTable().getAndroid());
+							m.setWeb(resStudent.getScoreTable().getWeb());
+							m.setTotal(resStudent.getScoreTable().getTotal());
+							m.setAvg(resStudent.getScoreTable().getAvg());
+							m.setGrade(resStudent.getScoreTable().getGrade());
+							break;
+						}
 					}
+					tableView.setItems(tableList);
+					tableView.refresh();
 				}
-				tableView.setItems(tableList);
-				tableView.refresh();
 				break;
 			}
 		}
